@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+   <link rel="shortcut icon" href="favicon/Athens.ico" type="image/x-icon">
+  <title>Sistema de Simulados Inteligente (Athens)</title>
+  <link rel="stylesheet" href="./styles.css" />
+ 
+</head>
+<body>
+  <header class="app-header">
+    <div class="brand">
+      <div class="brand__logo" aria-hidden="true">A</div>
+      <div>
+        <div class="brand__title">Athens</div>
+        <div class="brand__subtitle">Simulados educacionais • sem gabarito</div>
+      </div>
+    </div>
+
+    <div class="header-actions">
+      <button id="btnToggleTheme" class="btn btn--ghost" type="button" title="Alternar tema">🌙</button>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- CONFIG -->
+    <section id="panelConfig" class="panel">
+      <h1 class="panel__title">Carregar simulado</h1>
+      
+
+      <p class="panel__hint">
+        Cole aqui o JSON ( <a href="exemplos.html">
+      <button id="btnExemplo" class="btn btn--secondary" type="button">Carregar exemplo</button>
+       </a>
+         ) de questões gerado pela IA. O sistema não corrige e não mostra gabarito: apenas coleta as suas respostas.
+      </p>
+
+      <div class="field">
+        <label for="inputSimuladoJson">JSON do simulado</label>
+        <textarea id="inputSimuladoJson" class="textarea" placeholder='Cole o JSON aqui (array de questões ou objeto com “questoes”/“simulado”).'></textarea>
+      </div>
+
+      <div class="grid grid--actions">
+        <div class="field field--wide">
+          <label class="checkbox">
+            <input id="chkEmbaralhar" type="checkbox" />
+            <span>Embaralhar ordem das questões</span>
+          </label>
+        </div>
+
+        <div class="field field--wide">
+          <label class="checkbox">
+            <input id="chkPersistir" type="checkbox" checked />
+            <span>Salvar progresso automaticamente</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button id="btnCarregar" class="btn btn--primary" type="button">Carregar Simulado</button>
+        <button id="btnNovoSimulado" class="btn btn--danger" type="button" style="display:none;">Novo Simulado</button>
+      </div>
+
+      <div id="configStatus" class="status" role="status" aria-live="polite"></div>
+    </section>
+
+
+    <!-- QUIZ -->
+    <section id="panelQuiz" class="panel panel--quiz" hidden>
+      <div class="quiz-top">
+         <button id="btnNovoSimulado" class="btn btn--danger" type="button" style="display:none;">Novo Simulado</button>
+        <div>
+          <div id="quizTitle" class="panel__title panel__title--sm">Simulado</div>
+          <div id="quizMeta" class="panel__hint">Carregando...</div>
+          
+        </div>
+
+        <div class="quiz-progress">
+          <div class="progress-text"><span id="answeredCount">0</span>/<span id="totalCount">0</span> respondidas</div>
+          <div class="progress-bar" aria-hidden="true">
+            <div id="progressBarFill" class="progress-bar__fill" style="width:0%"></div>
+          </div>
+        </div>
+      </div>
+
+      <div id="questoes" class="questions" aria-live="polite"></div>
+
+      <div class="bottom-actions">
+        <button id="btnFinalizar" class="btn btn--primary" type="button">Finalizar</button>
+        <button id="btnBaixar" class="btn btn--secondary" type="button" disabled>Copiar/Baixar JSON</button>
+        <button id="btnNovoSimuladoFinal" class="btn btn--danger" type="button" hidden>Novo Simulado</button>
+         
+      </div>
+
+      <div class="small-note">
+        O JSON gerado contém apenas as respostas. A correção deve ser feita posteriormente pela IA.
+      </div>
+
+      <pre id="jsonPreview" class="json-preview" hidden></pre>
+      <div id="quizStatus" class="status" role="status" aria-live="polite"></div>
+    </section>
+  </main>
+
+  <script src="./app.js" defer></script>
+</body>
+</html>
+

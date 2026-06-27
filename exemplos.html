@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Documentação JSON - Athens</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:Arial, Helvetica, sans-serif;
+    background:#f4f6f9;
+    color:#222;
+    line-height:1.7;
+}
+
+header{
+    background:#2563eb;
+    color:white;
+    padding:35px;
+}
+
+header h1{
+    margin-bottom:10px;
+}
+
+.container{
+    width:90%;
+    max-width:1100px;
+    margin:auto;
+    padding:30px 0;
+}
+
+.card{
+    background:white;
+    padding:25px;
+    margin-bottom:25px;
+    border-radius:12px;
+    box-shadow:0 3px 10px rgba(0,0,0,.08);
+}
+
+h2{
+    margin-bottom:15px;
+    color:#1e3a8a;
+}
+
+h3{
+    margin-top:20px;
+    margin-bottom:10px;
+    color:#2563eb;
+}
+
+pre{
+    background:#1e1e1e;
+    color:#dcdcdc;
+    padding:18px;
+    border-radius:8px;
+    overflow:auto;
+    margin-top:15px;
+}
+
+code{
+    font-family:Consolas, monospace;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:15px;
+}
+
+th,td{
+    border:1px solid #ddd;
+    padding:10px;
+}
+
+th{
+    background:#2563eb;
+    color:white;
+}
+
+.ok{
+    color:green;
+    font-weight:bold;
+}
+
+.erro{
+    color:red;
+    font-weight:bold;
+}
+
+footer{
+    text-align:center;
+    color:#666;
+    padding:40px;
+}
+</style>
+
+</head>
+<body>
+
+<header>
+<a href="index.html">
+<button id="btnExemplo" class="btn btn--secondary" type="button">VOLTAR⬅️</button></a>
+
+
+<h1>📘 Documentação do JSON - Athens</h1>
+
+<p>
+Esta página descreve apenas a <strong>estrutura</strong> do JSON utilizada pelo sistema.
+Os valores mostrados são apenas marcadores (placeholders) e devem ser substituídos pelos dados reais.
+</p>
+
+</header>
+
+<div class="container">
+
+<div class="card">
+
+<h2>Estrutura Geral</h2>
+
+<pre><code>{
+  "titulo": "{titulo}",
+  "materia": "{materia}",
+  "tema": "{tema}",
+
+  "questoes": [
+
+  ]
+
+}</code></pre>
+
+</div>
+
+<div class="card">
+
+<h2>Tipos de Questões</h2>
+
+<table>
+
+<tr>
+<th>Tipo</th>
+<th>Descrição</th>
+</tr>
+
+<tr>
+<td>multipla_escolha</td>
+<td>Questão com alternativas.</td>
+</tr>
+
+<tr>
+<td>verdadeiro_falso</td>
+<td>Questão com duas opções: Verdadeiro ou Falso.</td>
+</tr>
+
+<tr>
+<td>resposta_curta</td>
+<td>Campo de texto de uma linha.</td>
+</tr>
+
+<tr>
+<td>discursiva</td>
+<td>Campo de texto longo.</td>
+</tr>
+
+</table>
+
+</div>
+
+<div class="card">
+
+<h2>Estrutura de cada tipo</h2>
+
+<h3>1. Múltipla escolha</h3>
+
+<pre><code>{
+  "id": 1,
+  "tipo": "multipla_escolha",
+  "pergunta": "{pergunta}",
+
+  "alternativas": [
+    "{alternativa_1}",
+    "{alternativa_2}",
+    "{alternativa_3}",
+    "{alternativa_4}"
+  ]
+}</code></pre>
+
+<h3>2. Verdadeiro ou Falso</h3>
+
+<pre><code>{
+  "id": 2,
+  "tipo": "verdadeiro_falso",
+  "pergunta": "{pergunta}"
+}</code></pre>
+
+<h3>3. Resposta Curta</h3>
+
+<pre><code>{
+  "id": 3,
+  "tipo": "resposta_curta",
+  "pergunta": "{pergunta}"
+}</code></pre>
+
+<h3>4. Discursiva</h3>
+
+<pre><code>{
+  "id": 4,
+  "tipo": "discursiva",
+  "pergunta": "{pergunta}"
+}</code></pre>
+
+</div>
+
+<div class="card">
+
+<h2>Estrutura Completa</h2>
+
+<pre><code>{
+  "titulo": "{titulo}",
+
+  "materia": "{materia}",
+
+  "tema": "{tema}",
+
+  "questoes": [
+
+    {
+      "id": 1,
+      "tipo": "multipla_escolha",
+      "pergunta": "{pergunta}",
+
+      "alternativas": [
+        "{alternativa_1}",
+        "{alternativa_2}",
+        "{alternativa_3}",
+        "{alternativa_4}"
+      ]
+    },
+
+    {
+      "id": 2,
+      "tipo": "verdadeiro_falso",
+      "pergunta": "{pergunta}"
+    },
+
+    {
+      "id": 3,
+      "tipo": "resposta_curta",
+      "pergunta": "{pergunta}"
+    },
+
+    {
+      "id": 4,
+      "tipo": "discursiva",
+      "pergunta": "{pergunta}"
+    }
+
+  ]
+}</code></pre>
+
+</div>
+
+<div class="card">
+
+<h2>Campos</h2>
+
+<table>
+
+<tr>
+<th>Campo</th>
+<th>Obrigatório</th>
+<th>Descrição</th>
+</tr>
+
+<tr>
+<td>titulo</td>
+<td>Sim</td>
+<td>Nome do simulado.</td>
+</tr>
+
+<tr>
+<td>materia</td>
+<td>Sim</td>
+<td>Nome da matéria.</td>
+</tr>
+
+<tr>
+<td>tema</td>
+<td>Sim</td>
+<td>Tema do simulado.</td>
+</tr>
+
+<tr>
+<td>questoes</td>
+<td>Sim</td>
+<td>Lista contendo todas as questões.</td>
+</tr>
+
+<tr>
+<td>id</td>
+<td>Sim</td>
+<td>Identificador único da questão.</td>
+</tr>
+
+<tr>
+<td>tipo</td>
+<td>Sim</td>
+<td>Tipo da questão.</td>
+</tr>
+
+<tr>
+<td>pergunta</td>
+<td>Sim</td>
+<td>Texto da pergunta.</td>
+</tr>
+
+<tr>
+<td>alternativas</td>
+<td>Apenas múltipla escolha</td>
+<td>Lista de alternativas.</td>
+</tr>
+
+</table>
+
+</div>
+
+<div class="card">
+
+<h2>Regras</h2>
+
+<ul>
+
+<li class="ok">Cada questão deve possuir um <strong>id</strong> único.</li>
+
+<li class="ok">O campo <strong>tipo</strong> deve conter exatamente um dos quatro tipos aceitos.</li>
+
+<li class="ok">A propriedade <strong>alternativas</strong> existe apenas para questões de múltipla escolha.</li>
+
+<li class="ok">Utilize sempre aspas duplas (<code>"</code>).</li>
+
+<li class="ok">Não esqueça vírgulas entre os elementos.</li>
+
+<li class="ok">Os textos entre chaves, como <code>{pergunta}</code>, são apenas marcadores e devem ser substituídos.</li>
+
+</ul>
+
+</div>
+
+<div class="card">
+
+<h2>JSON Inválido</h2>
+
+<pre><code>{
+  "alternativas": [
+    "{alternativa_1}"
+    "{alternativa_2}"
+  ]
+}</code></pre>
+
+<p class="erro">
+❌ Erro: falta uma vírgula entre os elementos do array.
+</p>
+
+</div>
+
+<div class="card">
+
+<h2>Fluxo de Uso</h2>
+
+<ol>
+
+<li>Monte o JSON seguindo esta documentação.</li>
+
+<li>Abra o Athens.</li>
+
+<li>Cole o JSON no campo de entrada.</li>
+
+<li>Clique em <strong>Carregar Simulado</strong>.</li>
+
+<li>Responda às questões.</li>
+
+<li>Exporte o JSON contendo apenas as respostas.</li>
+
+</ol>
+
+</div>
+
+</div>
+
+<footer>
+
+Athens • Documentação Oficial do Formato JSON
+
+</footer>
+
+</body>
+</html>

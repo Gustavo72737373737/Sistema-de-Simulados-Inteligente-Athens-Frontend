@@ -1,0 +1,50 @@
+[
+  {
+    "id": 1,
+    "materia": "Sociologia",
+    "tema": "Socialismo",
+    "tipo": "multipla_escolha",
+    "pergunta": "O socialismo busca principalmente reduzir a desigualdade social através de quais medidas?",
+    "alternativas": [
+      "Maior concentração de renda",
+      "Proteção social e igualdade de oportunidades",
+      "A extinção total do Estado",
+      "Privatização generalizada sem regulação"
+    ]
+  },
+  {
+    "id": 2,
+    "materia": "História",
+    "tema": "Idade Contemporânea",
+    "tipo": "verdadeiro_falso",
+    "pergunta": "A Guerra Fria foi um conflito indireto entre Estados Unidos e União Soviética."
+  },
+  {
+    "id": 3,
+    "materia": "Biologia",
+    "tema": "Genética",
+    "tipo": "resposta_curta",
+    "pergunta": "Defina, em poucas palavras, o que é DNA."
+  },
+  {
+    "id": 4,
+    "materia": "Filosofia",
+    "tema": "Ética",
+    "tipo": "discursiva",
+    "pergunta": "Explique como a ética influencia decisões individuais na vida cotidiana."
+  },
+  {
+    "id": 5,
+    "materia": "Português",
+ "tema": "Interpretação",
+    "tipo": "multipla_escolha",
+    "pergunta": "Em uma narrativa, qual elemento ajuda a situar tempo e espaço do enredo?",
+    "alternativas": [
+      "Personagens",
+      "Cenário",
+      "Narrador",
+      "Conflito"
+    ]
+  }
+]
+
