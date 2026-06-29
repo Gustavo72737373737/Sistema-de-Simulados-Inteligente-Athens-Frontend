@@ -1,108 +1,206 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-   <link rel="shortcut icon" href="favicon/Athens.ico" type="image/x-icon">
-  <title>Sistema de Simulados Inteligente (Athens)</title>
-  <link rel="stylesheet" href="./styles.css" />
- 
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="favicon/Athens.ico" type="image/x-icon">
+    <title>Athens • Sistema de Simulados Inteligente</title>
+    <style>
+        /* Reset de estilos básicos */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            display: flex;
+            background-color: #0f172a; /* Fundo escuro para combinar com o tema do app */
+            color: #f8fafc;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Barra Lateral (Sidebar) */
+        .sidebar {
+            position: fixed;
+            left: -280px; /* Escondida por padrão */
+            width: 280px;
+            height: 100%;
+            background-color: #1e293b;
+            color: #ffffff;
+            transition: all 0.3s ease;
+            z-index: 1000;
+            padding-top: 80px;
+            box-shadow: 4px 0 15px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Classe ativa via JS */
+        .sidebar.active {
+            left: 0;
+        }
+
+        .sidebar__brand {
+            padding: 0 25px;
+            margin-bottom: 30px;
+        }
+
+        .sidebar h2 {
+            font-size: 22px;
+            color: #38bdf8;
+            font-weight: 700;
+        }
+
+        .sidebar p {
+            font-size: 12px;
+            color: #94a3b8;
+            margin-top: 4px;
+        }
+
+        /* Links/Botões de Modos na Lateral */
+        .sidebar a {
+            display: block;
+            padding: 16px 25px;
+            color: #cbd5e1;
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 500;
+            border-left: 4px solid transparent;
+            transition: all 0.2s ease;
+        }
+
+        .sidebar a:hover {
+            background-color: #334155;
+            color: #ffffff;
+            border-left-color: #38bdf8;
+        }
+
+        /* Conteúdo Principal Centralizado e Limpo */
+        .main-content {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+
+        /* Movimentação do painel no Desktop quando o menu abre */
+        body.sidebar-open .main-content {
+            margin-left: 280px;
+        }
+
+        /* Botão de Menu Flutuante (Hambúrguer) */
+        .menu-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background-color: #38bdf8;
+            color: #0f172a;
+            border: none;
+            padding: 12px 18px;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            z-index: 1001;
+            box-shadow: 0 4px 12px rgba(56, 189, 248, 0.2);
+            transition: all 0.2s ease;
+        }
+
+        .menu-btn:hover {
+            background-color: #0284c7;
+            color: white;
+            transform: scale(1.05);
+        }
+
+        /* Caixa de Boas-Vindas Clean */
+        .app-welcome-box {
+            text-align: center;
+            max-width: 500px;
+            padding: 40px;
+        }
+
+        .app-welcome-box h1 {
+            font-size: 36px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            margin-bottom: 10px;
+            background: linear-gradient(to right, #38bdf8, #818cf8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .app-welcome-box p {
+            color: #94a3b8;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        .click-hint {
+            margin-top: 25px;
+            display: inline-block;
+            font-size: 13px;
+            color: #64748b;
+            border: 1px dashed #334155;
+            padding: 8px 16px;
+            border-radius: 20px;
+            animation: floating 2s infinite ease-in-out;
+        }
+
+        @keyframes floating {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-6px); }
+            100% { transform: translateY(0px); }
+        }
+    </style>
 </head>
 <body>
-  <header class="app-header">
-    <div class="brand">
-      <div class="brand__logo" aria-hidden="true">A</div>
-      <div>
-        <div class="brand__title">Athens</div>
-        <div class="brand__subtitle">Simulados educacionais • sem gabarito</div>
-      </div>
+
+    <!-- Botão Principal Hambúrguer -->
+    <button class="menu-btn" id="toggleBtn">☰ Menu</button>
+
+    <!-- Barra Lateral com os Modos Disponíveis -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar__brand">
+            <h2>Athens</h2>
+            <p>Selecione o modo de execução</p>
+        </div>
+        <!-- Os links levam para as páginas ou passam parâmetros -->
+        <a href="simulado.html?modo=padrao">📋 Simulado Padrão</a>
+        <a href="simulado.html?modo=enem">🎓 Simulado ENEM</a>
+        <a href="simulado.html?modo=concurso">🏛️ Simulado Concurso</a>
     </div>
 
-    <div class="header-actions">
-      <button id="btnToggleTheme" class="btn btn--ghost" type="button" title="Alternar tema">🌙</button>
+    <!-- Tela de Apresentação Estilo App Limpo -->
+    <div class="main-content">
+        <div class="app-welcome-box">
+            <h1>Athens</h1>
+            <p>Sistema Inteligente de Simulados Educacionais sem gabarito. Cole o JSON gerado pela sua inteligência artificial e inicie seus testes imediatamente.</p>
+            
+            <span class="click-hint">Clique em <b>☰ Menu</b> para iniciar</span>
+        </div>
     </div>
-  </header>
 
-  <main class="container">
-    <!-- CONFIG -->
-    <section id="panelConfig" class="panel">
-      <h1 class="panel__title">Carregar simulado</h1>
-      
+    <!-- Script de Alternância da Barra Lateral -->
+    <script>
+        const toggleBtn = document.getElementById('toggleBtn');
+        const sidebar = document.getElementById('sidebar');
+        const body = document.body;
 
-      <p class="panel__hint">
-        Cole aqui o JSON ( <a href="exemplos.html">
-      <button id="btnExemplo" class="btn btn--secondary" type="button">Carregar exemplo</button>
-       </a>
-         ) de questões gerado pela IA. O sistema não corrige e não mostra gabarito: apenas coleta as suas respostas.
-      </p>
+        toggleBtn.addEventListener('click', (e) => {
+            e.stopPropagation(); // Evita que o clique feche o menu imediatamente
+            sidebar.classList.toggle('active');
+            body.classList.toggle('sidebar-open');
+        });
 
-      <div class="field">
-        <label for="inputSimuladoJson">JSON do simulado</label>
-        <textarea id="inputSimuladoJson" class="textarea" placeholder='Cole o JSON aqui (array de questões ou objeto com “questoes”/“simulado”).'></textarea>
-      </div>
+        // Fecha a barra lateral se o usuário clicar em qualquer lugar da tela limpa
+        document.querySelector('.main-content').addEventListener('click', () => {
+            sidebar.classList.remove('active');
+            body.classList.remove('sidebar-open');
+        });
+    </script>
 
-      <div class="grid grid--actions">
-        <div class="field field--wide">
-          <label class="checkbox">
-            <input id="chkEmbaralhar" type="checkbox" />
-            <span>Embaralhar ordem das questões</span>
-          </label>
-        </div>
-
-        <div class="field field--wide">
-          <label class="checkbox">
-            <input id="chkPersistir" type="checkbox" checked />
-            <span>Salvar progresso automaticamente</span>
-          </label>
-        </div>
-      </div>
-
-      <div class="actions">
-        <button id="btnCarregar" class="btn btn--primary" type="button">Carregar Simulado</button>
-        <button id="btnNovoSimulado" class="btn btn--danger" type="button" style="display:none;">Novo Simulado</button>
-      </div>
-
-      <div id="configStatus" class="status" role="status" aria-live="polite"></div>
-    </section>
-
-
-    <!-- QUIZ -->
-    <section id="panelQuiz" class="panel panel--quiz" hidden>
-      <div class="quiz-top">
-         <button id="btnNovoSimulado" class="btn btn--danger" type="button" style="display:none;">Novo Simulado</button>
-        <div>
-          <div id="quizTitle" class="panel__title panel__title--sm">Simulado</div>
-          <div id="quizMeta" class="panel__hint">Carregando...</div>
-          
-        </div>
-
-        <div class="quiz-progress">
-          <div class="progress-text"><span id="answeredCount">0</span>/<span id="totalCount">0</span> respondidas</div>
-          <div class="progress-bar" aria-hidden="true">
-            <div id="progressBarFill" class="progress-bar__fill" style="width:0%"></div>
-          </div>
-        </div>
-      </div>
-
-      <div id="questoes" class="questions" aria-live="polite"></div>
-
-      <div class="bottom-actions">
-        <button id="btnFinalizar" class="btn btn--primary" type="button">Finalizar</button>
-        <button id="btnBaixar" class="btn btn--secondary" type="button" disabled>Copiar/Baixar JSON</button>
-        <button id="btnNovoSimuladoFinal" class="btn btn--danger" type="button" hidden>Novo Simulado</button>
-         
-      </div>
-
-      <div class="small-note">
-        O JSON gerado contém apenas as respostas. A correção deve ser feita posteriormente pela IA.
-      </div>
-
-      <pre id="jsonPreview" class="json-preview" hidden></pre>
-      <div id="quizStatus" class="status" role="status" aria-live="polite"></div>
-    </section>
-  </main>
-
-  <script src="./app.js" defer></script>
 </body>
 </html>
-
