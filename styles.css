@@ -48,11 +48,14 @@ body{
   background: linear-gradient(135deg, rgba(109,94,252,.95), rgba(79,209,197,.85));
   display:flex;align-items:center;justify-content:center;
   font-weight:800;
+  
 }
 
 .brand__logo-img {
   width: 100%;
   height: 100%;
+  border-radius: 14px;
+  
   object-fit: contain; /* Mantém a proporção da imagem sem distorcer */
 }
 
@@ -187,3 +190,69 @@ body{
   max-height: 280px;
 }
 
+/* --- Estilização e Alinhamento da Seção de Busca por Ano --- */
+
+/* Cria uma moldura organizada para os elementos não ficarem jogados na tela */
+.search-year-box {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 24px;
+  padding: 16px;
+  background: rgba(0, 0, 0, 0.15);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+
+/* Estiliza o rótulo do campo */
+.search-year-box label {
+  font-size: 13px;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+/* Alinha o input e o botão de buscar lado a lado */
+.search-year-row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+/* Estiliza especificamente o input do ano para herdar o visual do tema */
+#ano-selecionado {
+  width: 100%;
+  max-width: 180px;
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text);
+  outline: none;
+  font-weight: 600;
+}
+
+/* Alinha os botões de cópia (o botão padrão e a imagem do Bootstrap) de forma limpa abaixo da textarea */
+.copy-actions-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: 8px;
+}
+
+/* Estiliza a imagem de cópia do Bootstrap para se comportar como um botão clicável */
+.CopyToClipboard {
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  opacity: 0.7;
+  transition: transform 0.1s ease, opacity 0.15s ease;
+}
+
+.CopyToClipboard:hover {
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+.CopyToClipboard:active {
+  transform: scale(0.95);
+}
