@@ -39,15 +39,40 @@
       <h1 class="panel__title">Carregar simulado</h1>
       
       <!-- SEU BLOCO NO LUGAR EXATO E ESTRUTURADO -->
-      <div class="search-year-box">
-        <label for="ano-selecionado">Digite um ano:</label>
-        
-        <!-- Coloca o input e o botão buscar lado a lado -->
-        <div class="search-year-row">
-          <input type="text" id="ano-selecionado" placeholder="Ex: 2020" />
-          <button id="btn-buscar" class="btn btn--secondary">Buscar</button>
-        </div>
-      </div>
+    <div class="search-year-box">
+  <label for="ano-selecionado">Configure seu simulado:</label>
+  
+  <div class="search-year-row" style="display: flex; gap: 12px; margin-bottom: 15px; flex-wrap: wrap;">
+  
+  <div style="display: flex; flex-direction: column; gap: 4px;">
+    <label for="ano-selecionado" style="font-size: 12px; font-weight: bold; color: var(--text-muted, #888);">Ano do Exame</label>
+    <input type="text" id="ano-selecionado" placeholder="Ex: 2022" style="width: 100px; padding: 8px; background: var(--bg-panel, #222); color: var(--text, #fff); border: 1px solid var(--border, #444); border-radius: 6px; font-size: 14px;" />
+  </div>
+  
+  <div style="display: flex; flex-direction: column; gap: 4px;">
+    <label for="bloco-materia" style="font-size: 12px; font-weight: bold; color: var(--text-muted, #888);">Caderno / Bloco</label>
+    <select id="bloco-materia" style="width: 260px; padding: 8px; background: var(--bg-panel, #222); color: var(--text, #fff); border: 1px solid var(--border, #444); border-radius: 6px; font-size: 14px; cursor: pointer;">
+      <option value="0">Bloco 1 (Questões 1 a 50 - Linguagens)</option>
+      <option value="50">Bloco 2 (Questões 51 a 100 - Humanas)</option>
+      <option value="100">Bloco 3 (Questões 101 a 150 - Natureza)</option>
+      <option value="150">Bloco 4 (Questões 151 a 180 - Matemática)</option>
+    </select>
+  </div>
+
+  <div style="display: flex; flex-direction: column; gap: 4px;">
+    <label for="idioma-selecionado" style="font-size: 12px; font-weight: bold; color: var(--text-muted, #888);">Língua Estrangeira</label>
+    <select id="idioma-selecionado" style="width: 180px; padding: 8px; background: var(--bg-panel, #222); color: var(--text, #fff); border: 1px solid var(--border, #444); border-radius: 6px; font-size: 14px; cursor: pointer;">
+      <option value="">Prova Regular (Sem filtro)</option>
+      <option value="ingles">Inglês</option>
+      <option value="espanhol">Espanhol</option>
+    </select>
+  </div>
+
+</div>
+  
+  <button id="btn-buscar" class="btn btn--secondary">Buscar</button>
+</div>
+
         
         <pre id="output" class="textarea" placeholder="O código gerado aparecerá aqui..."></pre>
 

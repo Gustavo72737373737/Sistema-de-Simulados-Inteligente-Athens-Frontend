@@ -1,24 +1,51 @@
 const anoSelecionado = document.getElementById('ano-selecionado');
 const output = document.getElementById('output');
 const btnBuscar = document.getElementById('btn-buscar');
-const selectAno = document.getElementById('selectAno');
 const inputSimuladoJson = document.getElementById('inputSimuladoJson');
+
+const inputBlocoMateria = document.getElementById('bloco-materia'); 
+const inputIdiomaSelecionado = document.getElementById('idioma-selecionado');
 
 const options = { method: 'GET' };
 
-// Refatorado para usar async/await e filtrar apenas o que você quer
-const fetchData = async (value) => {
+const fetchData = async (ano, offsetRaw, idiomaRaw) => {
   try {
-    const res = await fetch(`https://api.enem.dev/v1/exams/${value}/questions?limit=50`, options);
+    const anoTratado = ano.trim();
+    
+    let offsetTratado = offsetRaw ? offsetRaw.trim() : "0";
+    if (offsetTratado === "" || isNaN(offsetTratado)) {
+      offsetTratado = "0";
+    }
+
+    let idiomaParam = "";
+    if (idiomaRaw) {
+      const idiomaLimpo = idiomaRaw.toLowerCase().trim();
+      if (idiomaLimpo === "inglês" || idiomaLimpo === "ingles") {
+        idiomaParam = "&language=ingles";
+      } else if (idiomaLimpo === "espanhol") {
+        idiomaParam = "&language=espanhol";
+      }
+    }
+  //fetch('https://api.enem.dev/v1/exams/2020/questions?limit=50&offset=1&language=ingles', options)
+    const urlCompleta = `https://api.enem.dev/v1/exams/${anoTratado}/questions?limit=50&offset=${offsetTratado}${idiomaParam}`;
+    console.log("Tentando conectar na URL:", urlCompleta);
+
+    const res = await fetch(urlCompleta, options);
+    
+    if (!res.ok) {
+      console.error(`Servidor rejeitou com status: ${res.status}`);
+      return [];
+    }
+
     const data = await res.json();
     
-    // Criamos um cofre temporário para guardar os gabaritos reais deste ano buscado
+    if (!data || !data.questions || !Array.isArray(data.questions)) {
+      return [];
+    }
+    
     const cofreGabaritosTemporario = {};
 
-    // Mapeia e higieniza as questões
     const questoesFiltradas = data.questions.map(questao => {
-      
-      // 1. Processamento e limpeza de parágrafos/imagens que você criou
       let paragrafosBrutos = questao.context ? questao.context.split('\n\n') : [];
       let imagemEncontrada = '';
 
@@ -34,65 +61,72 @@ const fetchData = async (value) => {
         return true; 
       });
 
-      // Se a API não veio com link na array files, usa a que você extraiu do texto
       let urlFinalImagem = questao.files && questao.files.length > 0 ? questao.files[0] : imagemEncontrada;
-
-      // 2. SALVA NO COFRE DA MEMÓRIA: Guardamos a resposta certa usando o index da questão
       const idQuestao = questao.index;
       cofreGabaritosTemporario[`q_${idQuestao}`] = questao.correctAlternative;
 
-      // 3. RETORNA O OBJETO SEM O GABARITO (Esconde a resposta da tela)
       return {
         id: idQuestao,
         titulo: questao.title || `Questão ${questao.index}`,
         disciplina: questao.discipline,
+        language: questao.language || "",
         contextoParagrafos: paragrafosLimpos,
         imagemUrl: urlFinalImagem,
         enunciado: questao.alternativesIntroduction,
-        alternativas: questao.alternatives.map(alt => {
-          return {
-            letra: alt.letter,
-            texto: alt.text
-          };
-        })
-        // O "gabarito" NÃO entra aqui. Ele foi totalmente deletado deste objeto!
+        alternativas: questao.alternatives.map(alt => ({
+          letra: alt.letter,
+          texto: alt.text
+        }))
       };
     });
 
-    // 4. Salva o cofre secreto no localStorage para o script de correção ler depois
     localStorage.setItem('athens_gabarito_secreto', JSON.stringify(cofreGabaritosTemporario));
-
     return questoesFiltradas; 
 
   } catch (err) {
-    console.error('Erro na requisição:', err);
+    console.error('Erro de conexão ou sintaxe:', err);
     return []; 
   }
 }
 
-// Evento do botão que consome os objetos filtrados
-btnBuscar.addEventListener('click', async () => {
-   if (!anoSelecionado.value.trim()) {
-     alert("Por favor, digite um ano!");
-     return;
-   }
+// CORRIGIDO: Evento de escuta limpo e sem duplicações de IF
+if (btnBuscar) {
+  btnBuscar.addEventListener('click', async () => {
+    if (!anoSelecionado || !anoSelecionado.value.trim()) {
+      alert("Por favor, digite um ano primeiro (Ex: 2022)!");
+      return;
+    }
 
-   const result = await fetchData(anoSelecionado.value);
+    const ano = anoSelecionado.value;
+    let offset = inputBlocoMateria ? inputBlocoMateria.value.trim() : "";
+    const idioma = inputIdiomaSelecionado ? inputIdiomaSelecionado.value.trim() : "";
 
-   if (result.length === 0) {
-     alert("Nenhuma questão encontrada para este ano ou erro na API.");
-     return;
-   }
-   
-   // Exibe os novos objetos filtrados e 100% SEM GABARITO na tela
-   const jsonSemSpoiler = JSON.stringify(result, null, 2);
-   
-   output.textContent = jsonSemSpoiler;
-   
-   // Preenche automaticamente a textarea se ela existir na tela para poupar seu tempo
-   if (inputSimuladoJson) {
-     inputSimuladoJson.value = jsonSemSpoiler;
-   }
+    // Sua estratégia salvadora: impede a mistura incorreta de offset alto + idioma
+    if (idioma !== "") {
+      console.log("Idioma detectado. Forçando offset para 0 para evitar erro 400 da API.");
+      offset = "0"; 
+      if (inputBlocoMateria) {
+        inputBlocoMateria.value = "0"; 
+      }
+    }
 
-   console.log("Simulado gerado e gabaritos salvos em segredo no localStorage!");
-});
+    if (output) {
+      output.textContent = "Buscando dados no servidor do ENEM...";
+    }
+
+    const result = await fetchData(ano, offset, idioma);
+
+    if (result.length === 0) {
+      alert("Nenhuma questão encontrada. Certifique-se de preencher apenas o Ano de forma regular ou use 'ingles'/'espanhol' com o Bloco em 0.");
+      if (output) output.textContent = "Erro na requisição. Verifique o que digitou.";
+      return;
+    }
+    
+    const jsonSemSpoiler = JSON.stringify(result, null, 2);
+    
+    if (output) output.textContent = jsonSemSpoiler;
+    if (inputSimuladoJson) inputSimuladoJson.value = jsonSemSpoiler;
+
+    console.log("Simulado gerado com sucesso!");
+  });
+}

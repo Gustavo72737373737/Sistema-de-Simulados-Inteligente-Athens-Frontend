@@ -204,43 +204,68 @@ body{
 /* --- Estilização e Alinhamento da Seção de Busca por Ano --- */
 
 /* Cria uma moldura organizada para os elementos não ficarem jogados na tela */
+/* ========================================================
+   CORREÇÃO DO CSS DA BARRA DE CONFIGURAÇÃO / BUSCA
+   ======================================================== */
+
+/* Agrupa todo o bloco de busca (label, inputs e botão) */
 .search-year-box {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  margin-bottom: 24px;
-  padding: 16px;
-  background: rgba(0, 0, 0, 0.15);
-  border: 1px solid var(--border);
-  border-radius: 12px;
+  gap: 8px;
+  width: 100%;
 }
 
-/* Estiliza o rótulo do campo */
-.search-year-box label {
-  font-size: 13px;
-  color: var(--muted);
-  font-weight: 600;
-}
-
-/* Alinha o input e o botão de buscar lado a lado */
+/* Força o ano, os selects e o botão a ficarem alinhados lado a lado */
 .search-year-row {
   display: flex;
-  gap: 10px;
+  gap: 12px;
   align-items: center;
+  width: 100%;
+  flex-wrap: wrap; /* Se a tela for de celular, eles quebram linha em vez de esmagar */
 }
 
-/* Estiliza especificamente o input do ano para herdar o visual do tema */
-#ano-selecionado {
-  width: 100%;
-  max-width: 180px;
-  padding: 12px;
+/* Ajuste específico para os campos select do simulado */
+.search-year-row select.text-input,
+.search-year-row select.textarea,
+.search-year-row select {
+  height: 46px; /* Mesma altura padrão dos seus inputs */
+  padding: 0 12px;
   border-radius: 12px;
   border: 1px solid var(--border);
-  background: transparent;
+  background: var(--bg-panel, rgba(255, 255, 255, 0.03)); /* Combina com o tema claro/escuro */
   color: var(--text);
   outline: none;
-  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 14px;
 }
+
+/* Garante tamanhos proporcionais para cada caixinha não cobrir a outra */
+#ano-selecionado {
+  width: 110px;
+  flex-shrink: 0;
+}
+
+#bloco-materia {
+  flex: 1; /* Ocupa o maior espaço disponível no meio */
+  min-width: 200px;
+}
+
+#idioma-selecionado {
+  width: 120px;
+  flex-shrink: 0;
+}
+
+/* Força o botão de buscar a ficar alinhado na mesma altura */
+#btn-buscar {
+  height: 46px;
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 
 /* Alinha os botões de cópia (o botão padrão e a imagem do Bootstrap) de forma limpa abaixo da textarea */
 .copy-actions-row {
