@@ -189,16 +189,21 @@
     </div>
 
   </div>
-
+ <div class="word-paginacao-topo">
+        <button id="btn-pagina-anterior2" class="btn btn--secondary" type="button" disabled>◀ Página Anterior</button>
+        <span id="indicador-pagina2" class="texto-pagina">Página 1 de 5</span>
+        <button id="btn-proxima-pagina2" class="btn btn--secondary" type="button">Próxima Página ▶</button>
+      </div>
   <div class="bottom-actions">
     <button id="btnFinalizar" class="btn btn--primary" type="button">Finalizar</button>
     <button id="btnBaixar" class="btn btn--secondary" type="button" disabled>Copiar/Baixar JSON</button>
     <button id="btnNovoSimuladoFinal" class="btn btn--danger" type="button" hidden>Novo Simulado</button>
   </div>
-
+    
   <div class="small-note">
     O JSON gerado contém apenas as respostas. A correção deve ser feita posteriormente pela IA.
   </div>
+    
 
   <pre id="jsonPreview" class="json-preview" hidden></pre>
   <div id="quizStatus" class="status" role="status" aria-live="polite"></div>

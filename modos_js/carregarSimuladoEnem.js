@@ -23,6 +23,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const btnBaixar = document.getElementById('btnBaixar');
   const jsonPreview = document.getElementById('jsonPreview');
+  const btnAnt2 = document.getElementById('btn-pagina-anterior2');
+  const indicadorPagina2 = document.getElementById('indicador-pagina2');
+  const btnProx2 = document.getElementById('btn-proxima-pagina2');
 
   // ==========================================
   // FUNÇÃO QUE DESENHA A PÁGINA ATUAL
@@ -112,25 +115,54 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const totalPaginas = Math.ceil(todasQuestoesEnem.length / questoesPorPagina);
     if (indicadorPagina) indicadorPagina.textContent = `Página ${paginaAtual} de ${totalPaginas || 1}`;
+    if (indicadorPagina2) indicadorPagina2.textContent = `Página ${paginaAtual} de ${totalPaginas || 1}`;
 
-    if (btnAnt) btnAnt.disabled = paginaAtual === 1;
-    if (btnProx) btnProx.disabled = paginaAtual === totalPaginas || totalPaginas === 0;
+    if (btnAnt && btnAnt2) {
+      btnAnt.disabled = paginaAtual === 1;
+      btnAnt2.disabled = paginaAtual === 1;
+
+    }
+    if (btnProx && btnProx2) {
+      btnProx.disabled = paginaAtual === totalPaginas || totalPaginas === 0;
+      btnProx2.disabled = paginaAtual === totalPaginas || totalPaginas === 0;
+    }
   }
 
   // ==========================================
   // BOTÕES DE NAVEGAR NAS PÁGINAS
   // ==========================================
-  if (btnAnt) {
+  if (btnAnt && btnAnt2) {
     btnAnt.addEventListener('click', () => {
-      if (paginaAtual > 1) { paginaAtual--; mostrarPaginaWord(); }
+      if (paginaAtual > 1) { paginaAtual--; mostrarPaginaWord();
+
+       }
     });
+      
+    btnAnt2.addEventListener('click', () => {
+      if (paginaAtual > 1) { paginaAtual--; mostrarPaginaWord();
+
+       }
+    });
+
+
   }
 
-  if (btnProx) {
+
+
+  if (btnProx && btnProx2) {
     btnProx.addEventListener('click', () => {
       const totalPaginas = Math.ceil(todasQuestoesEnem.length / questoesPorPagina);
-      if (paginaAtual < totalPaginas) { paginaAtual++; mostrarPaginaWord(); }
+      if (paginaAtual < totalPaginas) { paginaAtual++; mostrarPaginaWord();
+
+       }
     });
+      btnProx2.addEventListener('click', () => {
+      const totalPaginas = Math.ceil(todasQuestoesEnem.length / questoesPorPagina);
+      if (paginaAtual < totalPaginas) { paginaAtual++; mostrarPaginaWord();
+
+       }
+    });
+
   }
 
   function gerarJsonDoCartaoResposta() {
