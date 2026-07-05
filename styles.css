@@ -156,6 +156,7 @@ body{
   padding: 10px 12px;
   border: 1px solid var(--border);
   background: rgba(0,0,0,.10);
+  white-space: pre-line;
 }
 
 .choice input{accent-color: var(--primary)}
@@ -169,6 +170,16 @@ body{
   background: transparent;
   color: var(--text);
   outline:none;
+}
+
+#output{ 
+  max-height: 200px;
+
+  overflow:auto;
+  
+
+
+
 }
 
 .textarea{min-height: 150px; resize: vertical; line-height:1.5}
@@ -255,4 +266,69 @@ body{
 
 .CopyToClipboard:active {
   transform: scale(0.95);
+}
+
+
+
+/* PAGINAÇÃO */
+.quiz-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 20px;
+  padding-top: 15px;
+  border-top: 1px solid var(--border);
+  gap: 10px;
+}
+
+.pagination-indicator {
+  font-weight: 600;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+@media (max-width: 480px) {
+  .quiz-pagination {
+    flex-direction: column;
+    gap: 12px;
+  }
+  .quiz-pagination .btn {
+    width: 100%;
+  }
+}
+
+
+
+.bottom-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 18px;
+  border-top: 1px solid var(--border);
+}
+
+.quiz-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 24px;
+  padding-top: 18px;
+  border-top: 1px solid var(--border);
+  gap: 10px;
+}
+
+.pagination-indicator {
+  font-weight: 700;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+@media (max-width: 480px) {
+  .quiz-pagination {
+    flex-direction: column;
+    gap: 12px;
+  }
+  .quiz-pagination .btn {
+    width: 100%;
+  }
 }

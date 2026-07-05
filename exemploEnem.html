@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Documentação JSON ENEM - Athens</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:Arial, Helvetica, sans-serif;
+    background:#f4f6f9;
+    color:#222;
+    line-height:1.7;
+}
+
+header{
+    background:#1e3a8a; /* Azul mais escuro, estilo identidade do ENEM */
+    color:white;
+    padding:35px;
+}
+
+header h1{
+    margin-bottom:10px;
+}
+
+.btn-voltar {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: white;
+    padding: 8px 15px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    text-decoration: none;
+    display: inline-block;
+    margin-bottom: 15px;
+}
+
+.btn-voltar:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.container{
+    width:90%;
+    max-width:1100px;
+    margin:auto;
+    padding:30px 0;
+}
+
+.card{
+    background:white;
+    padding:25px;
+    margin-bottom:25px;
+    border-radius:12px;
+    box-shadow:0 3px 10px rgba(0,0,0,.08);
+}
+
+h2{
+    margin-bottom:15px;
+    color:#1e3a8a;
+}
+
+h3{
+    margin-top:20px;
+    margin-bottom:10px;
+    color:#2563eb;
+}
+
+pre{
+    background:#1e1e1e;
+    color:#dcdcdc;
+    padding:18px;
+    border-radius:8px;
+    overflow:auto;
+    margin-top:15px;
+}
+
+code{
+    font-family:Consolas, monospace;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:15px;
+}
+
+th,td{
+    border:1px solid #ddd;
+    padding:10px;
+}
+
+th{
+    background:#1e3a8a;
+    color:white;
+}
+
+.ok{
+    color:green;
+    font-weight:bold;
+    list-style-position: inside;
+    margin-bottom: 8px;
+}
+
+.erro{
+    color:red;
+    font-weight:bold;
+}
+
+footer{
+    text-align:center;
+    color:#666;
+    padding:40px;
+}
+</style>
+
+</head>
+<body>
+
+<header>
+<a href="simulado.html" class="btn-voltar">◀️ Voltar</a>
+
+<h1>📘 Documentação do JSON - Modo ENEM (Athens)</h1>
+
+<p>
+Esta página descreve a estrutura de dados obrigatória para rodar simulados no <strong>Modo ENEM</strong>.
+Garante a renderização em formato de folha de papel limpa do Word, itálicos automáticos para referências e folheamento por páginas.
+</p>
+
+</header>
+
+<div class="container">
+
+<div class="card">
+<h2>Estrutura Geral do Modo ENEM</h2>
+<p>Diferente do simulado padrão, o formato ENEM recebe uma <strong>lista direta (Array)</strong> de objetos de questões no arquivo, sem chaves de topo de metadados externos.</p>
+
+<pre><code>[
+  {
+    "id": 1,
+    "titulo": "{titulo_da_questao}",
+    "disciplina": "{disciplina}",
+    "contextoParagrafos": [
+      "{paragrafo_1}",
+      "{paragrafo_2}"
+    ],
+    "enunciado": "{enunciado_comando}",
+    "gabarito": "{letra_correta}",
+    "imagemUrl": "{link_da_imagem_ou_vazio}",
+    "alternativas": [
+      { "letra": "A", "texto": "{texto_A}" },
+      { "letra": "B", "texto": "{texto_B}" }
+    ]
+  }
+]</code></pre>
+</div>
+
+<div class="card">
+<h2>Formato dos Atributos Específicos</h2>
+<p>Veja como o interpretador do ENEM monta cada pedaço da folha de impressão baseando-se nos atributos:</p>
+
+<h3>1. Divisão de Parágrafos e Bibliografia</h3>
+<p>O campo <code>contextoParagrafos</code> aceita uma lista de textos corridos. O sistema lê as linhas e, se identificar termos como <em>"Disponível em"</em> ou <em>"Adaptado"</em>, aplica automaticamente as regras de itálico menor daABNT.</p>
+
+<pre><code>"contextoParagrafos": [
+  "Sentimos que toda satisfação de nossos desejos advinda do mundo assemelha-se à esmola...",
+  "SCHOPENHAUER, A. Aforismo para a sabedoria da vida. São Paulo: Martins Fontes, 2005."
+]</code></pre>
+
+<h3>2. Controle de Imagens</h3>
+<p>Se a questão possuir figuras ou gráficos, passe a URL direta em <code>imagemUrl</code>. Caso não possua, defina como uma string vazia (<code>""</code>) para o carregador ocultar a tag da folha perfeitamente.</p>
+
+<pre><code>"imagemUrl": "https://enem.dev"</code></pre>
+
+<h3>3. Array de Objetos nas Alternativas</h3>
+<p>No modo ENEM, cada alternativa é um objeto contendo obrigatoriamente as chaves <code>letra</code> e <code>texto</code>:</p>
+
+<pre><code>"alternativas": [
+  { "letra": "A", "texto": "Consagração de relacionamentos afetivos." },
+  { "letra": "B", "texto": "Administração da independência interior." }
+]</code></pre>
+</div>
+
+<div class="card">
+<h2>Modelo de Estrutura Completa (Exemplo Aceito)</h2>
+<p>Copie o modelo abaixo para usar como base na criação de novas questões estruturadas:</p>
+
+<pre id="output"><code>[
+  {
+    "id": 1,
+    "titulo": "Questão 1 - ENEM 2016",
+    "disciplina": "ciencias-humanas",
+    "contextoParagrafos": [
+      "Sentimos que toda satisfação de nossos desejos advinda do mundo assemelha-se à esmola que mantém hoje o mendigo vivo, porém prolonga amanhã a sua fome.",
+      "SCHOPENHAUER, A. Aforismo para a sabedoria da vida. São Paulo: Martins Fontes, 2005."
+    ],
+    "enunciado": "O trecho destaca uma ideia remanescente de uma tradição filosófica ocidental, segundo a qual a felicidade se mostra indissociavelmente ligada à",
+    "gabarito": "B",
+    "imagemUrl": "",
+    "alternativas": [
+      { "letra": "A", "texto": "Consagração de relacionamentos afetivos." },
+      { "letra": "B", "texto": "Administração da independência interior." },
+      { "letra": "C", "texto": "Fugacidade do conhecimento empírico." },
+      { "letra": "D", "texto": "Liberdade de expressão religiosa." },
+      { "letra": "E", "texto": "Busca de prazeres efêmeros." }
+    ]
+  }
+]</code></pre>
+
+  <div class="copy-actions-row" style="margin-top: 15px; display: flex; gap: 10px; align-items: center;">
+    <button id="btn-copiar" class="btn btn--primary" style="background: #1e3a8a; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: bold;">
+      Copiar Código Modelo
+    </button>
+    <img alt="Copy To Clipboard" class="CopyToClipboard" src="https://d285iu4yok4lqf.cloudfront.net/images/bootstrap/copy.svg" style="width: 20px; height: 20px; cursor: pointer;" onclick="copyContent('output', document.getElementById('btn-copiar'));" />
+  </div>
+</div>
+
+<div class="card">
+<h2>Mapeamento de Campos (Tabela de Parâmetros)</h2>
+
+<table>
+<tr>
+<th>Campo</th>
+<th>Obrigatório</th>
+<th>Tipo de Dado</th>
+<th>Descrição</th>
+</tr>
+<tr>
+<td>id</td>
+<td>Sim</td>
+<td>Número</td>
+<td>Posição ordinal da questão.</td>
+</tr>
+<tr>
+<td>titulo</td>
+<td>Sim</td>
+<td>Texto</td>
+<td>Título de cabeçalho da questão (Ex: Questão 1 - ENEM 2016).</td>
+</tr>
+<tr>
+<td>disciplina</td>
+<td>Sim</td>
+<td>Texto</td>
+<td>Matéria ou área do conhecimento (Ex: ciencias-humanas).</td>
+</tr>
+<tr>
+<td>contextoParagrafos</td>
+<td>Sim</td>
+<td>Array de Textos</td>
+<td>Lista contendo os blocos de texto de apoio da questão.</td>
+</tr>
+<tr>
+<td>enunciado</td>
+<td>Sim</td>
+<td>Texto</td>
+<td>O comando/pergunta final da questão.</td>
+</tr>
+<tr>
+<td>gabarito</td>
+<td>Sim</td>
+<td>Texto</td>
+<td>Letra da alternativa correta (Utilizado para o cálculo de acertos).</td>
+</tr>
+<tr>
+<td>imagemUrl</td>
+<td>Sim</td>
+<td>Texto (URL)</td>
+<td>Link completo da imagem. Envie string vazia "" se não houver.</td>
+</tr>
+<tr>
+<td>alternativas</td>
+<td>Sim</td>
+<td>Array de Objetos</td>
+<td>Lista contendo as chaves ordinais "letra" e "texto".</td>
+</tr>
+</table>
+</div>
+
+<div class="card">
+<h2>Regras Fundamentais do Modo ENEM</h2>
+<ul>
+<li class="ok">O arquivo DEVE começar com colchetes <code>[</code> e terminar com colchetes <code>]</code>.</li>
+<li class="ok">O campo <code>contextoParagrafos</code> não aceita strings puras, precisa ser uma lista de strings separadas por vírgula.</li>
+<li class="ok">O identificador de gabarito deve ser em letra maiúscula (<code>"A"</code>, <code>"B"</code>, etc).</li>
+<li class="ok">Não use sintaxe Markdown para injetar imagens no meio do texto; use sempre o campo isolado <code>imagemUrl</code>.</li>
+</ul>
+</div>
+
+<div class="card">
+<h2>Exemplo de Erro Comum (JSON Inválido)</h2>
+<pre><code>{
+  "titulo": "Questão 1",
+  "contextoParagrafos": "Texto corrido direto sem ser lista"
+}</code></pre>
+<p class="erro">
+❌ Erro: O carregador do ENEM utiliza repetições (<code>forEach</code>) para renderizar os parágrafos. Se o dado não for enviado dentro de um array <code>[ ]</code>, o sistema falhará ao carregar.
+</p>
+</div>
+
+</div>
+
+<footer>
+Athens • Documentação Oficial do Formato JSON - Modo ENEM
+</footer>
+
+<!-- Link para o seu script de cópia universal -->
+<script src="modos_js/utils.js"></script>
+<script>
+  // Ativa o clique do botão de cópia usando o seu utils.js global
+  const btn = document.getElementById('btn-copiar');
+  if (btn) {
+    btn.addEventListener('click', (e) => {
+      copyContent('output', e.target);
+    });
+  }
+</script>
+</body>
+</html>

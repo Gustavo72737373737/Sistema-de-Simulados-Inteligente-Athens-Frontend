@@ -4,7 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>questao</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="enemStyle.css">
+    <link rel="preconnect" href="https://googleapis.com">
+<link rel="preconnect" href="https://gstatic.com" crossorigin>
+<link href="https://googleapis.com/css2?family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+
 </head>
 <body>
 
@@ -43,18 +47,23 @@
           <input type="text" id="ano-selecionado" placeholder="Ex: 2020" />
           <button id="btn-buscar" class="btn btn--secondary">Buscar</button>
         </div>
+      </div>
         
-        <textarea id="output" class="textarea" placeholder="O código gerado aparecerá aqui..."></textarea>
+        <pre id="output" class="textarea" placeholder="O código gerado aparecerá aqui..."></pre>
+
+
         
         <!-- Alinha os dois botões de copiar lado a lado de forma elegante -->
         <div class="copy-actions-row">
           <button id="btn-cop" class="btn btn--primary">Copiar Código</button>
-          <img alt="Copy To Clipboard" id="btn-copiar" class="CopyToClipboard" src="https://d285iu4yok4lqf.cloudfront.net/images/bootstrap/copy.svg" onclick="copyDivToClipboard('output');" />
+          <img alt="Copy To Clipboard" id="btn-copiar" class="btn btn--primary" src="https://d285iu4yok4lqf.cloudfront.net/images/bootstrap/copy.svg" onclick="copyDivToClipboard('output');" />
+          <button id="btn-limpar" class="btn btn--danger">Limpar</button>
         </div>
       </div>
+      <script src="modos_js/utils.js"></script>
 
       <p class="panel__hint">
-        Cole aqui o JSON ( <a href="exemplos.html"><button id="btnExemplo" class="btn btn--secondary" type="button">Carregar exemplo</button></a> ) de questões gerado pela IA. O sistema não corrige e não mostra gabarito: apenas coleta as suas respostas.
+        Cole aqui o JSON ( <a href="exemploEnem.html"><button id="btnExemplo" class="btn btn--secondary" type="button">Carregar exemplo</button></a> ) de questões gerado pela IA. O sistema não corrige e não mostra gabarito: apenas coleta as suas respostas.
       </p>
 
       <div class="field">
@@ -83,46 +92,97 @@
       <div class="actions">
         <button id="btnCarregar" class="btn btn--primary" type="button">Carregar Simulado</button>
         <button id="btnNovoSimulado" class="btn btn--danger" type="button" style="display:none;">Novo Simulado</button>
+        <div class="copy-actions-row" style="margin-top: 15px; display: flex; gap: 10px; align-items: center;">
+          <!-- 1. ID alterado para 'btn-copiar' para ativar o feedback de texto -->
+          <button id="btn-copiar" class="btn btn--primary" style="background: #2563eb; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: bold;">
+            Copiar Código
+          </button>
+          <!-- 2. onclick alterado para 'copyContent()' e ID de conflito removido -->
+          <img alt="Copy To Clipboard" class="CopyToClipboard" src="https://d285iu4yok4lqf.cloudfront.net/images/bootstrap/copy.svg" style="width: 20px; height: 20px; cursor: pointer;" onclick="copyContent();" />
+        </div>
       </div>
+      <script src="modos_js/utils.js" defer></script>
 
       <div id="configStatus" class="status" role="status" aria-live="polite"></div>
     </section>
 
-    <!-- QUIZ -->
-    <section id="panelQuiz" class="panel panel--quiz" hidden>
-      <div class="quiz-top">
-         <button id="btnNovoSimulado" class="btn btn--danger" type="button" style="display:none;">Novo Simulado</button>
-        <div>
-          <div id="quizTitle" class="panel__title panel__title--sm">Simulado</div>
-          <div id="quizMeta" class="panel__hint">Carregando...</div>
-        </div>
+   <!-- ========================================================
+     SEÇÃO DO QUIZ ATUALIZADA COM AS SUAS IDEIAS (SUBSTITUA NO SEU HTML)
+     ======================================================== */ -->
+<section id="panelQuiz" class="panel panel--quiz" hidden>
+  <div class="quiz-top">
+    <button id="btnNovoSimulado" class="btn btn--danger" type="button" style="display:none;">Novo Simulado</button>
+    <div>
+      <div id="quizTitle" class="panel__title panel__title--sm">Simulado</div>
+      <div id="quizMeta" class="panel__hint">Carregando...</div>
+    </div>
 
-        <div class="quiz-progress">
-          <div class="progress-text"><span id="answeredCount">0</span>/<span id="totalCount">0</span> respondidas</div>
-          <div class="progress-bar" aria-hidden="true">
-            <div id="progressBarFill" class="progress-bar__fill" style="width:0%"></div>
-          </div>
-        </div>
+    <div class="quiz-progress">
+      <div class="progress-text"><span id="answeredCount">0</span>/<span id="totalCount">0</span> respondidas</div>
+      <div class="progress-bar" aria-hidden="true">
+        <div id="progressBarFill" class="progress-bar__fill" style="width:0%"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 1. NOVO: MENU DE ABAS ESTILO WORD -->
+  <div class="Abas-navegacao">
+    <a href="#aba-caderno-prova" class="aba-link ativa">📄 Caderno de Questões</a>
+    <a href="#aba-cartao-resposta" class="aba-link">✒️ Cartão-Resposta Oficial</a>
+  </div>
+
+  <!-- CONTÊINER PARA AS ABAS SEPARADAS -->
+  <div class="conteudo-abas-container">
+
+    <!-- ABA 1: O CADERNO DE QUESTÕES COM PÁGINAS DO WORD -->
+    <div id="aba-caderno-prova" class="painel-aba-conteudo">
+      
+      <!-- Controles para o usuário folhear as páginas do caderno -->
+      <div class="word-paginacao-topo">
+        <button id="btn-pagina-anterior" class="btn btn--secondary" type="button" disabled>◀ Página Anterior</button>
+        <span id="indicador-pagina" class="texto-pagina">Página 1 de 5</span>
+        <button id="btn-proxima-pagina" class="btn btn--secondary" type="button">Próxima Página ▶</button>
       </div>
 
-      <div id="questoes" class="questions" aria-live="polite"></div>
-
-      <div class="bottom-actions">
-        <button id="btnFinalizar" class="btn btn--primary" type="button">Finalizar</button>
-        <button id="btnBaixar" class="btn btn--secondary" type="button" disabled>Copiar/Baixar JSON</button>
-        <button id="btnNovoSimuladoFinal" class="btn btn--danger" type="button" hidden>Novo Simulado</button>
+      <!-- A mesa cinza que segura a nossa folha A4 -->
+      <div class="folha-word-container">
+        <!-- Mantemos a sua div original id="questoes" aqui dentro! -->
+        <div id="questoes" class="questions" aria-live="polite"></div>
       </div>
 
-      <div class="small-note">
-        O JSON gerado contém apenas as respostas. A correção deve ser feita posteriormente pela IA.
-      </div>
+    </div>
 
-      <pre id="jsonPreview" class="json-preview" hidden></pre>
-      <div id="quizStatus" class="status" role="status" aria-live="polite"></div>
-    </section>
+    <!-- ABA 2: O CARTÃO-RESPOSTA INDEPENDENTE -->
+    <div id="aba-cartao-resposta" class="painel-aba-conteudo" hidden>
+      <div id="cartao-gabarito" class="cartao-gabarito">
+        <h3 class="gabarito-titulo">Cartão-Resposta Oficial</h3>
+        <p class="gabarito-sub">Preencha as bolinhas correspondentes às suas respostas do caderno.</p>
+        
+        <!-- Onde as bolinhas de preencher vão nascer via JavaScript -->
+        <div id="linhas-gabarito" class="gabarito-linhas-container"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="bottom-actions">
+    <button id="btnFinalizar" class="btn btn--primary" type="button">Finalizar</button>
+    <button id="btnBaixar" class="btn btn--secondary" type="button" disabled>Copiar/Baixar JSON</button>
+    <button id="btnNovoSimuladoFinal" class="btn btn--danger" type="button" hidden>Novo Simulado</button>
+  </div>
+
+  <div class="small-note">
+    O JSON gerado contém apenas as respostas. A correção deve ser feita posteriormente pela IA.
+  </div>
+
+  <pre id="jsonPreview" class="json-preview" hidden></pre>
+  <div id="quizStatus" class="status" role="status" aria-live="polite"></div>
+</section>
+
   </main>
    
   <script src="modos_js/utils.js" defer></script>
-  <script src="modos_js/enem-engine.js" defer></script>
+  <script src="modos_js/buscadorEnem.js" defer></script>
+  <script src="modos_js/carregarSimuladoEnem.js" defer></script>
 </body>
 </html>

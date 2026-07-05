@@ -229,7 +229,12 @@ const state = {
   questoes: [], // Array com as questões higienizadas que estão em exibição.
   respostas: {}, // Dicionário indexado pelo ID da questão para guardar as respostas salvas do aluno.
   config: { embaralhar: false, persistir: true }, // Configurações de comportamento da sessão.
-  startedAt: null // Carimbo de data/hora de quando o usuário iniciou o simulado.
+  startedAt: null,   // Carimbo de data/hora de quando o usuário iniciou o simulado.
+  // --- NOVAS PROPRIEDADES ---
+  currentPage: 1,
+  itemsPerPage: 7 // Altere para 5, 10 ou o que preferir por página
+
+
 };
 
 // Gera um hash numérico rápido baseado no conteúdo textual das questões para identificar univocamente a prova.
@@ -346,57 +351,122 @@ function setQuestionAnsweredVisual(qId, tipo){
 }
 
 // Limpa a área de exibição e reconstrói no HTML todas as questões do simulado a partir do estado atual.
+// Limpa a área de exibição e reconstrói no HTML as questões da página atual
 function renderQuestoes(){
   const container = $('#questoes');
-  container.innerHTML = ''; // Esvazia o container para não duplicar dados.
+  container.innerHTML = ''; 
 
   const total = state.questoes.length;
   $('#quizMeta').textContent = `Questões: ${total} • Sem correção (apenas coleta)`;
 
-  // Varre a lista estruturada de questões montando os elementos visuais.
-  state.questoes.forEach((q, idx) => {
-    const tipo = normalizeTipo(q.tipo);
-    const already = state.respostas[q.id]?.resposta; // Verifica se já há uma resposta salva para esta questão.
+  if (total === 0) return;
 
-    const card = document.createElement('article'); // Cria o bloco/card da questão.
+  // Configuração padrão de itens por página (Ex: 1 questão por página)
+    const itemsPerPage = state.itemsPerPage;
+
+  // Lógica de Paginação
+  const totalPages = Math.ceil(total / state.itemsPerPage);
+  state.currentPage = clamp(state.currentPage, 1, totalPages);
+
+  const startIdx = (state.currentPage - 1) * state.itemsPerPage;
+  const endIdx = startIdx + state.itemsPerPage;
+  const currentQuestions = state.questoes.slice(startIdx, endIdx);
+
+  // Varre apenas as questões da página atual
+  currentQuestions.forEach((q, currentIdx) => {
+    const globalIdx = startIdx + currentIdx; // Índice real global (Q1, Q2, Q3...)
+    const tipo = normalizeTipo(q.tipo);
+    const already = state.respostas[q.id]?.resposta;
+
+    const card = document.createElement('article');
     card.className = 'q-card';
 
-    // Estrutura interna base com cabeçalho, texto da pergunta e o corpo onde entram as opções/inputs.
     card.innerHTML = `
       <div class="q-head">
-        <div class="q-id">Q${idx+1}</div>
+        <div class="q-id">Q${globalIdx + 1}</div>
         <div class="q-metadata">${safeString(q.materia || '')} • ${safeString(q.tema || '')}</div>
       </div>
       <p class="q-text"></p>
       <div class="q-body"></div>
     `;
 
-    card.querySelector('.q-text').textContent = safeString(q.pergunta); // Define o enunciado textualmente (segurança contra XSS).
+    card.querySelector('.q-text').textContent = safeString(q.pergunta);
     const body = card.querySelector('.q-body');
 
-    // Desvia a renderização interna para a função correspondente ao tipo de questão encontrado.
-    if (tipo === 'multipla_escolha'){
-      renderMultipla(q, body, already);
-    } else if (tipo === 'verdadeiro_falso'){
-      renderVerdadeiroFalso(q, body, already);
-    } else if (tipo === 'resposta_curta'){
-      renderRespostaCurta(q, body, already);
-    } else if (tipo === 'discursiva'){
-      renderDiscursiva(q, body, already);
-    } else {
-      // Mensagem visual preventiva se houver um tipo não esperado.
+    if (tipo === 'multipla_escolha') renderMultipla(q, body, already);
+    else if (tipo === 'verdadeiro_falso') renderVerdadeiroFalso(q, body, already);
+    else if (tipo === 'resposta_curta') renderRespostaCurta(q, body, already);
+    else if (tipo === 'discursiva') renderDiscursiva(q, body, already);
+    else {
       const p = document.createElement('p');
       p.className = 'panel__hint';
       p.textContent = `Tipo não suportado: ${tipo}`;
       body.appendChild(p);
     }
 
-    container.appendChild(card); // Insere o card montado no container principal da tela.
+    container.appendChild(card);
   });
 
-  updateProgress(); // Recalcula o progresso inicial após renderizar.
+  // Renderiza a barra de navegação (Anterior / Próximo)
+  renderPaginationControls(totalPages);
+
+  // CONTROLE DOS BOTÕES FINAIS: Só mostra a div ".bottom-actions" se for a última página
+  const bottomActions = $('.bottom-actions');
+  if (bottomActions) {
+    if (state.currentPage === totalPages) {
+      bottomActions.style.display = 'flex';
+    } else {
+      bottomActions.style.display = 'none';
+    }
+  }
+
+  updateProgress();
 }
 
+// Cria os botões Anterior, Próximo e o contador de páginas
+function renderPaginationControls(totalPages) {
+  let pagContainer = $('.quiz-pagination');
+  if (!pagContainer) {
+    pagContainer = document.createElement('div');
+    pagContainer.className = 'quiz-pagination';
+  } else {
+    pagContainer.innerHTML = '';
+  }
+
+  // Botão Anterior
+  const btnPrev = document.createElement('button');
+  btnPrev.className = 'btn btn--secondary';
+  btnPrev.textContent = '◀ Anterior';
+  btnPrev.disabled = state.currentPage === 1;
+  btnPrev.addEventListener('click', () => {
+    state.currentPage--;
+    renderQuestoes();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  // Indicador de Posição
+  const indicator = document.createElement('span');
+  indicator.className = 'pagination-indicator';
+  indicator.textContent = `Questão ${state.currentPage} de ${totalPages}`;
+
+  // Botão Próximo
+  const btnNext = document.createElement('button');
+  btnNext.className = 'btn btn--secondary';
+  btnNext.textContent = 'Próximo ▶';
+  btnNext.disabled = state.currentPage === totalPages;
+  btnNext.addEventListener('click', () => {
+    state.currentPage++;
+    renderQuestoes();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  pagContainer.appendChild(btnPrev);
+  pagContainer.appendChild(indicator);
+  pagContainer.appendChild(btnNext);
+
+  // Adiciona a paginação logo abaixo do bloco de questões
+  $('#questoes').appendChild(pagContainer);
+}
 // Atualiza o valor da resposta no estado e dispara a gravação no localStorage se autorizado.
 function setResposta(id, tipo, resposta){
   state.respostas[id] = { id, tipo, resposta };
@@ -586,6 +656,8 @@ async function init(){
     panelConfig.hidden = true;
     panelQuiz.hidden = false;
 
+
+    state.currentPage = 1; // <-- Resetar para a primeira página
     renderQuestoes();
     setStatus(statusCfg, '');
     setStatus(statusQuiz, 'Simulado pronto. Registre suas respostas.');
@@ -623,6 +695,7 @@ async function init(){
     state.respostas = {};
     state.startedAt = null;
     state.meta = { titulo:'', materia:'', tema:'' };
+    state.currentPage = 1;
 
     // Reseta elementos visuais da interface para o padrão limpo de fábrica.
     panelQuiz.hidden = true;

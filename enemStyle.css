@@ -1,0 +1,597 @@
+:root{
+  --bg: #0b1220;
+  --card:#111b33;
+  --text:#e8eefc;
+  --muted:#aab6de;
+  --primary:#6d5efc;
+  --primary2:#4fd1c5;
+  --danger:#ff4d6d;
+  --border: rgba(255,255,255,.10);
+  --shadow: 0 12px 30px rgba(0,0,0,.35);
+  --radius: 16px;
+}
+
+:root[data-theme='light']{
+  --bg: #f6f7fb;
+  --card:#ffffff;
+  --text:#121a2b;
+  --muted:#4a5a84;
+  --primary:#5b4bff;
+  --primary2:#16a7a0;
+  --danger:#e11d48;
+  --border: rgba(0,0,0,.10);
+  --shadow: 0 12px 30px rgba(15,23,42,.10);
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+  background: radial-gradient(1200px 700px at 15% -10%, rgba(109,94,252,.35), transparent 55%),
+              radial-gradient(900px 600px at 90% 0%, rgba(79,209,197,.25), transparent 50%),
+              var(--bg);
+  color: var(--text);
+}
+
+.app-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding: 18px 20px;
+  max-width: 1050px;
+  margin: 0 auto;
+}
+
+.brand{display:flex;gap:12px;align-items:center}
+.brand__logo{
+  width:44px;height:44px;border-radius:14px;
+  background: linear-gradient(135deg, rgba(109,94,252,.95), rgba(79,209,197,.85));
+  display:flex;align-items:center;justify-content:center;
+  font-weight:800;
+  
+}
+
+.brand__logo-img {
+  width: 100%;
+  height: 100%;
+  border-radius: 14px;
+  
+  object-fit: contain; /* Mantém a proporção da imagem sem distorcer */
+}
+
+
+.brand__title{font-weight:800;letter-spacing:.2px}
+.brand__subtitle{font-size:12px;color:var(--muted);margin-top:2px}
+
+.container{max-width:1050px;margin:0 auto;padding: 8px 20px 40px}
+
+.panel{
+  background: color-mix(in srgb, var(--card) 90%, transparent);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 18px;
+}
+
+.panel__title{font-size:22px;margin:0 0 8px}
+.panel__title--sm{font-size:18px}
+.panel__hint{color:var(--muted);margin:0 0 14px}
+
+.grid{display:grid;gap:12px}
+.grid--actions{grid-template-columns: 1fr 1fr}
+
+@media (max-width: 760px){
+  .grid--actions{grid-template-columns:1fr}
+  .app-header{padding: 14px 14px}
+  .container{padding: 8px 14px 40px}
+}
+
+.field label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px}
+.field--wide{grid-column: 1/-1}
+
+.select{
+  width:100%;
+  padding: 12px 12px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text);
+  outline: none;
+}
+
+.actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:14px}
+
+.btn{
+  border-radius: 12px;
+  padding: 12px 16px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text);
+  cursor: pointer;
+  font-weight: 700;
+  transition: transform .05s ease, background .15s ease, border-color .15s ease, opacity .15s ease;
+}
+.btn:active{transform: translateY(1px)}
+.btn:disabled{opacity:.55;cursor:not-allowed}
+
+.btn--primary{background: linear-gradient(135deg, var(--primary), var(--primary2)); border-color: transparent}
+.btn--secondary{background: rgba(109,94,252,.12)}
+.btn--ghost{background: transparent}
+.btn--danger{background: rgba(255,77,109,.14); border-color: rgba(255,77,109,.25)}
+
+.checkbox{display:flex;gap:10px;align-items:center;color:var(--muted);font-weight:600}
+.checkbox input{accent-color: var(--primary)}
+
+.status{margin-top: 14px; color: var(--muted); font-weight: 600}
+
+/* QUIZ */
+/* ========================================================
+   PARTE DO QUIZ REVISADA E LIMPA (COLE NO SEU CSS GLOBAL)
+   ======================================================== */
+
+.panel--quiz {
+  padding: 0; 
+  overflow: hidden;
+}
+
+.quiz-top {
+  padding: 18px; 
+  display: flex; 
+  align-items: flex-start; 
+  justify-content: space-between; 
+  gap: 14px; 
+  border-bottom: 1px solid var(--border);
+}
+
+.quiz-progress {
+  min-width: 260px;
+}
+
+.progress-text {
+  color: var(--muted);
+  font-weight: 700;
+  font-size: 13px;
+  margin-bottom: 8px;
+}
+
+.progress-bar {
+  height: 10px; 
+  border-radius: 999px; 
+  background: rgba(255,255,255,.08); 
+  overflow: hidden; 
+  border: 1px solid var(--border);
+}
+
+.progress-bar__fill {
+  height: 100%; 
+  background: linear-gradient(90deg, var(--primary), var(--primary2)); 
+  width: 0%;
+}
+
+/* O contêiner de questões padrão (Simulado Simples e Concursos) */
+.questions {
+  padding: 18px; 
+  display: grid; 
+  gap: 14px;
+}
+
+.q-card {
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,.03);
+  padding: 14px;
+}
+
+.q-head {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.q-id {
+  font-weight: 900;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.q-metadata {
+  font-size: 12px;
+  color: var(--muted);
+  font-weight: 700;
+}
+
+.q-text {
+  font-size: 16px;
+  line-height: 1.35;
+  margin: 0 0 12px;
+  font-weight: 800;
+}
+
+.choice-list {
+  display: grid;
+  gap: 10px;
+}
+
+.choice {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-radius: 12px;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  background: rgba(0,0,0,.10);
+}
+
+.choice input {
+  accent-color: var(--primary);
+}
+
+.choice span {
+  font-weight: 700;
+}
+
+.text-input, .textarea {
+  width: 100%;
+  padding: 12px 12px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text);
+  outline: none;
+}
+
+/* MODIFICADO: Caixa do #output corrigida e pronta para uso seguro */
+#output { 
+  max-height: 200px;
+  overflow: auto;
+  white-space: pre-wrap; /* Mantém a quebra de linhas do JSON recebido */
+  word-wrap: break-word; /* Evita que o texto quebre o layout horizontalmente */
+  font-family: monospace; /* Fonte com estilo de código */
+  background: rgba(0, 0, 0, 0.15);
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  color: var(--text);
+}
+
+
+
+
+.textarea{min-height: 150px; resize: vertical; line-height:1.5}
+
+.choice.is-answered{border-color: rgba(79,209,197,.55)}
+
+.bottom-actions{padding: 14px 18px; display:flex; gap:12px; border-top: 1px solid var(--border); align-items:center; justify-content:space-between; flex-wrap:wrap}
+.bottom-actions .btn{min-width: 220px}
+.small-note{padding: 0 18px 16px; color: var(--muted); font-weight: 700; font-size: 13px}
+
+.json-preview{
+  margin: 0 18px 16px;
+  background: rgba(0,0,0,.20);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 12px;
+  color: var(--text);
+  overflow:auto;
+  max-height: 280px;
+}
+
+/* --- Estilização e Alinhamento da Seção de Busca por Ano --- */
+
+/* Cria uma moldura organizada para os elementos não ficarem jogados na tela */
+.search-year-box {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 24px;
+  padding: 16px;
+  background: rgba(0, 0, 0, 0.15);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+
+/* Estiliza o rótulo do campo */
+.search-year-box label {
+  font-size: 13px;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+/* Alinha o input e o botão de buscar lado a lado */
+.search-year-row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+/* Estiliza especificamente o input do ano para herdar o visual do tema */
+#ano-selecionado {
+  width: 100%;
+  max-width: 180px;
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text);
+  outline: none;
+  font-weight: 600;
+}
+
+/* Alinha os botões de cópia (o botão padrão e a imagem do Bootstrap) de forma limpa abaixo da textarea */
+.copy-actions-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: 8px;
+}
+
+/* Estiliza a imagem de cópia do Bootstrap para se comportar como um botão clicável */
+.CopyToClipboard {
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  opacity: 0.7;
+  transition: transform 0.1s ease, opacity 0.15s ease;
+}
+
+.CopyToClipboard:hover {
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+.CopyToClipboard:active {
+  transform: scale(0.95);
+}
+
+
+/* ========================================================
+   ARQUIVO: enemStyle.css 
+   (Design estilo folha de papel limpa de impressão do Word)
+   ======================================================== */
+
+/* 1. COMPORTAMENTO E ABAS DE NAVEGAÇÃO */
+.Abas-navegacao {
+  display: flex;
+  gap: 6px;
+  border-bottom: 2px solid var(--border, #cbd5e1);
+  background: rgba(0, 0, 0, 0.05); /* Fundo sutil para destacar os botões */
+  padding: 10px 10px 0 10px;
+}
+
+.aba-link {
+  display: inline-block;
+  padding: 10px 22px;
+  text-decoration: none;
+  color: var(--muted, #64748b);
+  font-weight: 700;
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 13px;
+  border: 1px solid transparent;
+  border-bottom: none;
+  border-radius: 8px 8px 0 0;
+  transition: all 0.2s ease;
+}
+
+.aba-link:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text);
+}
+
+/* Quando a aba está ativa (Estilo aba do Word selecionada) */
+.aba-link.ativa {
+  background-color: #ffffff !important; /* Força fundo branco da aba */
+  color: #000000 !important; /* Letra preta na aba ativa */
+  border-color: var(--border, #cbd5e1) !important;
+  margin-bottom: -2px; /* Encaixa perfeitamente por cima da linha */
+  position: relative;
+  z-index: 2;
+}
+
+/* 2. CONTROLES DE PÁGINA DO WORD (TOPO DA PROVA) */
+.word-paginacao-topo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.02);
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--border);
+}
+
+.texto-pagina {
+  font-family: system-ui, sans-serif;
+  font-weight: 800;
+  font-size: 14px;
+  color: var(--text);
+}
+
+/* 3. MESA CINZA DO LEITOR DE DOCUMENTOS (WORD / PDF) */
+.folha-word-container {
+  background-color: #cbd5e1; /* Cor cinza clássica de fundo do Office */
+  padding: 30px 15px;
+  display: flex;
+  justify-content: center;
+}
+
+/* 4. RESET TOTAL DA SUA CLASSE .QUESTIONS ORIGINAL */
+/* Usamos !important para garantir que o grid escuro do style.css suma nesta aba */
+.questions {
+  display: flex !important; 
+  flex-direction: column !important;
+  gap: 45px !important;
+  padding: 45px 55px !important; /* Margens de uma folha de prova oficial */
+  
+  background-color: #ffffff !important; /* Fundo papel branco de verdade */
+  color: #000000 !important; /* Cor da tinta preta de impressão */
+  font-family: "Frutiger LT Std", "Frutiger", "Segoe UI", "PT Sans", Arial, sans-serif;
+  
+  width: 100% !important;
+  max-width: 800px !important;
+  min-height: 600px !important;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.25) !important; /* Sombra de papel suspenso */
+  border: 1px solid #94a3b8 !important;
+  border-radius: 2px !important;
+}
+
+/* 5. ESTRUTURA E ELEMENTOS DA QUESTÃO DO ENEM */
+.item-questao {
+  border: none !important;
+  background: none !important;
+  box-shadow: none !important;
+  padding: 0 0 35px 0 !important;
+  margin: 0 !important;
+  border-bottom: 1px dashed #7f8c8d !important; /* Linha destacando o fim da questão */
+}
+
+.item-questao:last-child {
+  border-bottom: none !important; /* Tira o pontilhado da última questão da folha */
+}
+
+.titulo-questao {
+  font-size: 17px;
+  font-weight: bold;
+  color: #000000 !important;
+  margin-bottom: 4px;
+}
+
+.etiqueta-disciplina {
+  font-size: 11px;
+  color: #555555 !important;
+  text-transform: uppercase;
+  font-family: system-ui, sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.texto-contexto {
+  line-height: 1.6;
+  margin: 14px 0;
+  font-size: 16px;
+}
+
+/* Fonte bibliográfica menor e em itálico para simular o caderno oficial */
+.texto-fonte-bibliografica {
+  font-size: 13px;
+  font-style: italic;
+  color: #333333;
+  margin-top: -6px;
+  margin-bottom: 18px;
+}
+
+.imagem-questao {
+  max-width: 100%;
+  height: auto;
+  margin: 18px 0;
+  display: block;
+}
+
+/* Enunciado e alternativas perdem a serifa para dar agilidade na leitura */
+.enunciado-questao {
+  font-weight: bold;
+  font-family: system-ui, -apple-system, sans-serif;
+  margin: 18px 0;
+  font-size: 16px;
+}
+
+/* 6. CHECKLIST LIMPO (SUBSTITUI OS CARDS DE MARCAR) */
+.lista-opcoes {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  font-family: system-ui, -apple-system, sans-serif;
+}
+
+.opcao-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+  color: #000000 !important;
+}
+
+.opcao-item:hover {
+  background-color: #f1f5f9; /* Retorno cinza sutil ao passar o mouse */
+}
+
+.opcao-item input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  accent-color: #000000; /* Força o check clássico a ficar preto de caneta */
+}
+
+/* 7. CARTÃO-RESPOSTA OFICIAL (GABARITO INDEPENDENTE) */
+.cartao-gabarito {
+  max-width: 440px;
+  margin: 25px auto;
+  background-color: #fcfcfc !important;
+  border: 2px solid #333333 !important; /* Borda grossa estilo documento oficial */
+  border-radius: 8px;
+  padding: 25px;
+  color: #000000 !important;
+}
+
+.gabarito-titulo {
+  text-align: center;
+  text-transform: uppercase;
+  font-weight: 900;
+  font-family: system-ui, sans-serif;
+  font-size: 16px;
+  margin: 0 0 6px 0;
+}
+
+.gabarito-sub {
+  font-size: 12px;
+  text-align: center;
+  color: #555555;
+  margin-bottom: 22px;
+  font-family: system-ui, sans-serif;
+}
+
+.gabarito-linha {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px dashed #cccccc;
+}
+
+.gabarito-numero {
+  font-weight: bold;
+  font-size: 14px;
+  font-family: system-ui, sans-serif;
+  width: 30px;
+}
+
+.gabarito-opcoes {
+  display: flex;
+  gap: 8px;
+}
+
+/* As bolinhas clássicas do gabarito de preencher */
+.gabarito-bola {
+  width: 26px;
+  height: 26px;
+  border: 2px solid #333333;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: bold;
+  font-family: system-ui, sans-serif;
+  cursor: pointer;
+  background-color: #ffffff;
+  color: #333333;
+  transition: all 0.15s ease;
+}
+
+/* O efeito da caneta preta pintando a bolinha */
+.gabarito-bola.preenchida {
+  background-color: #000000 !important;
+  color: #ffffff !important;
+}
