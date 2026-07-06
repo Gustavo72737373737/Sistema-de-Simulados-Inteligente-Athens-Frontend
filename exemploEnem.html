@@ -214,7 +214,7 @@ Garante a renderização em formato de folha de papel limpa do Word, itálicos a
 ]</code></pre>
 
   <div class="copy-actions-row" style="margin-top: 15px; display: flex; gap: 10px; align-items: center;">
-    <button id="btn-copiar" class="btn btn--primary" style="background: #1e3a8a; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: bold;">
+    <button id="btn-copiar_exemplo" class="btn btn--primary" style="background: #1e3a8a; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: bold;">
       Copiar Código Modelo
     </button>
     <img alt="Copy To Clipboard" class="CopyToClipboard" src="https://d285iu4yok4lqf.cloudfront.net/images/bootstrap/copy.svg" style="width: 20px; height: 20px; cursor: pointer;" onclick="copyContent('output', document.getElementById('btn-copiar'));" />
@@ -313,7 +313,7 @@ Athens • Documentação Oficial do Formato JSON - Modo ENEM
 <script src="modos_js/utils.js"></script>
 <script>
   // Ativa o clique do botão de cópia usando o seu utils.js global
-  const btn = document.getElementById('btn-copiar');
+  const btn = document.getElementById('btn-copiar_exemplo');
   if (btn) {
     btn.addEventListener('click', (e) => {
       copyContent('output', e.target);
