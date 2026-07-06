@@ -1,6 +1,10 @@
 const copyContent = async () => {
   try {
+<<<<<<< HEAD
     const elementoDeOrigem = document.getElementById('output'); 
+=======
+    const elementoDeOrigem = document.getElementById('output'); // Captura o elemento de origem do conteúdo a ser copiado
+>>>>>>> 84f1e8c66ccd8149f76c4b0c8c10cdfb3abd3f12
     if (!elementoDeOrigem) return;
 
     let text = elementoDeOrigem.value !== undefined ? elementoDeOrigem.value : elementoDeOrigem.innerText;
