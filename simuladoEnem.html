@@ -80,7 +80,7 @@
         
         <!-- Alinha os dois botões de copiar lado a lado de forma elegante -->
         <div class="copy-actions-row">
-          <button id="btn-cop" class="btn btn--primary">Copiar Código</button>
+         
           <img alt="Copy To Clipboard" id="btn-copiar" class="btn btn--primary" src="https://d285iu4yok4lqf.cloudfront.net/images/bootstrap/copy.svg" onclick="copyDivToClipboard('output');" />
           <button id="btn-limpar" class="btn btn--danger">Limpar</button>
         </div>
@@ -119,9 +119,7 @@
         <button id="btnNovoSimulado" class="btn btn--danger" type="button" style="display:none;">Novo Simulado</button>
         <div class="copy-actions-row" style="margin-top: 15px; display: flex; gap: 10px; align-items: center;">
           <!-- 1. ID alterado para 'btn-copiar' para ativar o feedback de texto -->
-          <button id="btn-copiar" class="btn btn--primary" style="background: #2563eb; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: bold;">
-            Copiar Código
-          </button>
+         
           <!-- 2. onclick alterado para 'copyContent()' e ID de conflito removido -->
           <img alt="Copy To Clipboard" class="CopyToClipboard" src="https://d285iu4yok4lqf.cloudfront.net/images/bootstrap/copy.svg" style="width: 20px; height: 20px; cursor: pointer;" onclick="copyContent();" />
         </div>
@@ -206,6 +204,8 @@
     
 
   <pre id="jsonPreview" class="json-preview" hidden></pre>
+  <button id="btn-copiarJsonPreview" class="btn btn--primary" style="background: #2563eb; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: bold;">
+    Copiar Código</button>
   <div id="quizStatus" class="status" role="status" aria-live="polite"></div>
 </section>
 
