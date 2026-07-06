@@ -1,6 +1,6 @@
 const copyContent = async () => {
   try {
-    const elementoDeOrigem = document.getElementById('output' || 'inputSimulado'); // Captura o elemento de origem do conteúdo a ser copiado
+    const elementoDeOrigem = document.getElementById('output'); // Captura o elemento de origem do conteúdo a ser copiado
     if (!elementoDeOrigem) return;
 
     // DETECÇÃO AUTOMÁTICA: Se tiver .value (textarea), usa. Se não, usa .innerText (pre)
